@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Register or Login</title>
+	<link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+</head>
+<body>
+	<div class="wrapper">
+		<div class="container">
+			<h1>Register</h1>
+			<form action="/users/new" method="POST">
+				<span>First Name: <input type="text" name="first_name"></span>
+				<span>Last Name: <input type="text" name="last_name"></span>
+				<span>Email: <input type="text" name="email"></span>
+				<span>Password: <input type="text" name="password">	</span>
+				<span>Confirm Password: <input type="text" name="passconf"></span>
+				<input type="submit" value="Register">
+			</form>
+		</div>
+		<div class="container">
+			<h1>Login</h1>
+			<form action="/users/login" method="POST">
+				<span>Email: <input type="text" name="email"></span>
+				<span>Password: <input type="text" name="password"></span>
+				<input type="submit" value="Login">
+			</form>
+		</div>
+		
+			{% with messages = get_flashed_messages(category_filter=['error']) %}
+				{% if messages %}
+					<div class="error">
+					{% for message in messages %}
+						<p>{{message}}</p>
+					{% endfor %}
+					</div>
+				{% endif %}
+			{% endwith %}
+	</div>
+</body>
+</html>

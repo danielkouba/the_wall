@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>
+		The Wall
+	</title>
+	<link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+</head>
+<body>
+	<header>
+		<h1>CodingDojo Wall</h1>
+		<p>Welcome {{session['username']}}</p>
+		
+		<a href="{{url_for('logout')}}">logout</a>
+	</header>
+	
+	<div class="wrapper">
+		{% with success = get_flashed_messages(category_filter=["success"]) %}
+			{% if success %}
+		    	{%- for msg in success %}
+		    	<p>{{ msg }}</p>
+		    	{% endfor -%}
+			{% endif %}
+		{% endwith %}
+
+		<div class="newmessage">
+			<h3>post a message</h3>
+			<form action="/postMessage" method="POST">
+				<input type="textarea" name="messageInput" class="messageInput">
+				<input type="submit" value="Post a Message">
+			</form>
+		</div>
+
+
+		{% for message in all_messages %}
+				<div class="displayMessage">
+				
+					<h4>{{message['first_name']+ " "+ message['last_name'] + " - " + message['created_at'].strftime('%B %e, %Y')}}</h4>
+					<p>{{message['message']}}</p>
+
+					<div class="comment">	
+						{% for comment in all_comments %}
+							{%if comment['id'] == message['id'] %}
+							<div class="displayComment">
+								<h5>{{ comment['first_name'] }} {{ comment['last_name'] }} - {{ comment['created_at'].strftime('%B %e, %Y') }}</h5>
+								<p>{{ comment['comment'] }}</p>
+							</div>
+							{% endif %}
+						{% endfor %}
+							<div class="postComment">
+								<form action="/postComment/{{message['id']}}" method="POST">
+								<input type="textarea" name="commentInput" class="commentInput">
+								<input type="submit" value="Post a Comment">
+							</form>
+							</div>
+						</div>
+				</div>
+		{% endfor %}
+
+	</div>
+
+</body>
+</html>
